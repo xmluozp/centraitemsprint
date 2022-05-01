@@ -59,7 +59,7 @@ const PrintList = ({ className }) => {
 
 	const init = async () => {
 		const resLeft = await api.getLeft()
-		const resRight = await api.getRight()
+		const resRight = await api.getRight(selectedLeft)
 		setLeftItems(resLeft)
 		setRightItems(resRight)
 	}
@@ -78,14 +78,15 @@ const PrintList = ({ className }) => {
 					<div className={cn('titleRow')}>Work Orders List</div>
 					<div className={cn('itemRow')}>
 						<ul>
-							{leftItems?.map((number, i) => {
-								const active = selectedLeft === number ? 'active' : ''               
+							{leftItems?.map(({WorkOrderNumber, NumberOfWindows}, i) => {
+								const active = selectedLeft === WorkOrderNumber ? 'active' : '' 
+								const checkedNum = _.values(checked?.[selectedLeft]).filter( a => a);
 								return (
-									<li className={cn('btn-toolbar justify-content-between', active)} key={number + '' + i} onClick={() => handleItemSelect(number)}>
+									<li className={cn('btn-toolbar justify-content-between', active)} key={WorkOrderNumber + '' + i} onClick={() => handleItemSelect(WorkOrderNumber)}>
 										<span>
-											<b>#</b> {number}
+											<b>#</b> {WorkOrderNumber}
 										</span>
-										<span>1/30</span>
+										<span>{checkedNum}/{NumberOfWindows}</span>
 									</li>
 								)
 							})}
